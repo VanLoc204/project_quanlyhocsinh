@@ -1,191 +1,72 @@
+# Student Management System (Hệ Thống Quản Lý Học Sinh)
 
-# 🚀 HƯỚNG DẪN LÀM VIỆC NHÓM BẰNG GITHUB  
-(Dành cho dự án PHP MVC – XAMPP – MySQL)  
-👑 Nhóm trưởng: **Lợi**
+## Giới thiệu dự án (Project Overview)
+Hệ Thống Quản Lý Học Sinh là một ứng dụng web được xây dựng trên nền tảng **PHP thuần (Vanilla PHP)** kết hợp với cơ sở dữ liệu **MySQL**, ứng dụng mô hình kiến trúc **MVC (Model - View - Controller)**. Dự án nhằm mục đích số hóa và tối ưu hóa quy trình quản lý học tập tại trường học, cung cấp các tính năng chuyên biệt cho từng nhóm người dùng: Ban Giám Hiệu, Quản trị viên, Giáo viên và Học sinh.
 
----
+## Công nghệ sử dụng (Tech Stack)
+- **Backend:** PHP (Native), PDO/MySQLi
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Cơ sở dữ liệu:** MySQL (Database: `quan_ly_hoc_sinh_cleannew`)
+- **Kiến trúc phần mềm:** MVC (Model - View - Controller)
 
-## 1️⃣ Git & GitHub là gì? (Hiểu một lần là xong)
+## Phân quyền & Tính năng chính (Features & Roles)
 
-| Khái niệm | Giải thích siêu dễ |
-|---------|------------------|
-| **Git** | Lưu lịch sử code trên máy mỗi người |
-| **GitHub** | Nơi đưa code lên mạng để nhiều người làm chung |
-| **Repository (repo)** | Dự án chung của cả nhóm |
-| **Branch** | Nhánh làm việc riêng để tránh giẫm code nhau |
-| **Pull Request (PR)** | Yêu cầu ghép code từ nhánh vào `main` |
+Hệ thống cung cấp 4 vai trò (Roles) với các chức năng tương ứng thông qua bộ định tuyến (Router) tập trung tại `index.php`:
 
-➡ Tư duy chính:  
-> **Mỗi người làm riêng trên nhánh của mình → Xong mới ghép vào main qua PR**
+### 1. Admin (Quản trị viên - Role 1)
+- **Quản lý dữ liệu cốt lõi:** Năm học, Danh mục môn học, Danh mục lớp học.
+- **Quản lý người dùng:** Tài khoản hệ thống, Hồ sơ giáo viên, Hồ sơ học sinh.
+- **Nghiệp vụ:** Phân lớp học sinh, Sắp xếp thời khóa biểu.
 
----
+### 2. BGH - Ban Giám Hiệu (Role 2)
+- Theo dõi tình hình toàn trường.
+- Xem thống kê, báo cáo học tập và công tác giảng dạy.
+- Phối hợp cùng Admin phân công giáo viên chủ nhiệm và giảng dạy.
 
-## 2️⃣ Quy tắc vàng của nhóm
+### 3. Giáo viên (Teacher - Role 3)
+- **Giáo viên bộ môn:** Nhập điểm, xem lịch dạy, xem danh sách lớp đang dạy, xem bảng điểm chi tiết, quản lý hồ sơ cá nhân.
+- **Giáo viên chủ nhiệm:** Duyệt đơn xin nghỉ phép của học sinh, tổng kết điểm, xem thông tin lớp chủ nhiệm.
 
-✅ Không ai được đụng code trực tiếp trong `main`  
-✅ Mỗi tính năng → **1 nhánh riêng**  
-✅ Code xong → **Push → Tạo Pull Request → Nhóm trưởng merge**  
-✅ Khi main có cập nhật → ai cũng phải **pull** về
+### 4. Học sinh (Student - Role 4)
+- Xem thời khóa biểu cá nhân.
+- Tra cứu điểm số các môn học.
+- Tạo và gửi đơn xin nghỉ phép trực tuyến.
+- Quản lý hồ sơ cá nhân.
 
----
+## Cấu trúc thư mục (Folder Structure)
+Dự án áp dụng chặt chẽ mô hình kiến trúc MVC thông qua một Front Controller:
 
-## 3️⃣ Tên nhánh mẫu cho dự án MVC
-
-| Thành viên | Nhiệm vụ | Tên nhánh |
-|-----------|---------|----------|
-| Lợi | Auth + Quản lý merge | `feature/auth` |
-| Duy | View – Giao diện home | `feature/view-home` |
-| Tùng | Model + DB | `feature/model-product` |
-| Bảo | Controller – Cart | `feature/controller-cart` |
-| Diễn | UI sản phẩm | `feature/view-product` |
-| Cơ | Navigation + Footer | `feature/layout` |
-
-Bạn có thể tùy chỉnh theo phân công thực tế.
-
----
-
-## 4️⃣ Hướng dẫn thực tế (Theo từng bước)
-
-🟦 **Bước 1 — Lấy dự án về máy (chỉ làm 1 lần)**
-
-```bash
-git clone https://github.com/<your-team>/<repo>.git
-cd <repo>
+```text
+Project_quan_ly_hoc_sinh/
+├── app/
+│   ├── Controllers/   # Nơi chứa các class điều khiển logic (VD: cDangNhap.php, cHocSinh.php,...)
+│   ├── Models/        # Tương tác trực tiếp với cơ sở dữ liệu (Database CRUD)
+│   └── Views/         # Chứa giao diện hiển thị cho người dùng (HTML/CSS/JS)
+├── config/            # Chứa các file cấu hình hệ thống như ketnoi.php (Database connection)
+├── public/            # Thư mục chứa các tệp tĩnh (CSS, uploads, vendor)
+├── db/                # Chứa file schema cơ sở dữ liệu (schema.sql - nếu có)
+├── index.php          # Front Controller: Điểm vào duy nhất, nhận Request và điều hướng (Router act)
+└── README.md          # Tài liệu dự án hiện tại
 ```
 
----
+## Hướng dẫn cài đặt (Installation)
 
-🟩 **Bước 2 — Trước khi bắt đầu code**
-
-> Luôn cập nhật code mới nhất từ main
-
-```bash
-git checkout main
-git pull origin main
-```
-
----
-
-🟨 **Bước 3 — Tạo nhánh riêng để làm tính năng**
-
-```bash
-git checkout -b feature/tinh-nang
-```
-
-VD:
-```bash
-git checkout -b feature/login
-```
-
-💡 Mỗi người chỉ làm trên **nhánh của mình**
+1. **Clone repository:**
+   ```bash
+   git clone <repository_url>
+   ```
+2. **Cài đặt môi trường:**
+   - Cài đặt phần mềm tạo Web Server cục bộ như XAMPP, WAMP, hoặc Laragon.
+   - Di chuyển thư mục dự án vào thư mục gốc của Web Server (vd: `htdocs` đối với XAMPP).
+3. **Cấu hình Database:**
+   - Truy cập trang quản trị CSDL (thường là `http://localhost/phpmyadmin`).
+   - Tạo một cơ sở dữ liệu mới với tên `quan_ly_hoc_sinh_cleannew` (Encoding: utf8mb4_general_ci).
+   - Import file cơ sở dữ liệu (`.sql`) đính kèm trong source code vào database vừa tạo.
+4. **Cấu hình kết nối:**
+   - Mở file `config/ketnoi.php`.
+   - Đảm bảo các thông tin `$local`, `$user`, `$pass`, và `$db` khớp với môi trường Localhost của bạn.
+5. **Khởi chạy ứng dụng:**
+   - Mở trình duyệt và truy cập đường dẫn: `http://localhost/Project_quan_ly_hoc_sinh/index.php`
 
 ---
-
-🟧 **Bước 4 — Code xong thì lưu lại (commit)**
-
-```bash
-git add .
-git commit -m "feat: xong giao dien login"
-```
-
----
-
-🟥 **Bước 5 — Đưa nhánh lên GitHub**
-
-```bash
-git push origin feature/login
-```
-
----
-
-🟪 **Bước 6 — Tạo Pull Request (PR)**
-
-Trên GitHub:
-- Menu **Pull Requests**
-- Bấm **New Pull Request**
-- Chọn nhánh của bạn → so với `main`
-- Bấm **Create Pull Request**
-- Ghi mô tả đã làm gì
-
-➡ Chờ nhóm trưởng kiểm tra
-
----
-
-🟫 **Bước 7 — Nhóm trưởng merge**
-
-1. Kiểm tra code trong tab **Files changed**  
-2. Nếu ổn → bấm **Merge Pull Request**  
-3. **Xoá nhánh cũ** để tránh rối
-
----
-
-♻️ **Bước 8 — Tất cả cập nhật code mới nhất**
-
-Sau mỗi lần merge:
-
-```bash
-git checkout main
-git pull origin main
-```
-
-→ Tất cả có phiên bản code mới nhất
-
----
-
-# 5️⃣ Làm việc với Database chung
-
-- Cấu trúc bảng được để trong:  
-  `db/schema.sql`
-
-- Nếu ai thay đổi bảng → phải:
-  ✅ cập nhật lại `schema.sql`  
-  ✅ thông báo nhóm pull & import lại DB
-
----
-
-# 6️⃣ CRUD Git dành cho nhóm (dễ nhớ)
-
-| Mục đích | Lệnh | Khi nào dùng |
-|--------|------|-------------|
-| Lấy code từ GitHub | `git pull origin main` | Mỗi lần chuẩn bị làm |
-| Tạo nhánh mới | `git checkout -b feature/x` | Bắt đầu 1 tính năng |
-| Chuyển nhánh | `git checkout main` | Khi muốn quay lại main |
-| Lưu file | `git add .` | Sau khi chỉnh file |
-| Ghi chú thay đổi | `git commit -m ""` | Khi hoàn thành 1 bước |
-| Đẩy code lên GitHub | `git push origin feature/x` | Khi muốn gửi cho nhóm |
-
----
-
-# 7️⃣ Lỗi thường gặp & cách xử lý
-
-| Lỗi | Nguyên nhân | Cách xử lý |
-|----|-------------|-----------|
-| Push bị từ chối | Bạn đang push vào main | Tạo PR |
-| Code bị ghi đè | Làm chung trên main | Tạo nhánh riêng |
-| Xung đột code (merge conflict) | 2 người sửa 1 file | Ngồi đối chiếu rồi sửa lại |
-| Không pull được | Lịch sử lệch | `git pull --rebase origin main` |
-
----
-
-## ✅ Tóm tắt lại chỉ 3 dòng cho nhớ
-
-> **1. Không đụng code main**  
-> **2. Mỗi người 1 nhánh riêng**  
-> **3. Merge qua Pull Request**
-
-Tuân thủ 3 điều này → **Không bao giờ giẫm code nhau** ✅
-
----
-
-# 📌 Checklist (nhắc lại cho nhóm)
-
-| Hành động | Ai làm |
-|---------|--------|
-| Merge PR | Lợi 👑 |
-| Review PR | Mọi người comment, Lợi approve |
-| Quản lý branch | Nhóm trưởng |
-| Cập nhật `schema.sql` khi đổi DB | Người chỉnh DB |
-| Tất cả phải `pull origin main` hằng ngày | Mỗi thành viên |
-
----
-
+*Dự án này là minh chứng thực tế cho việc áp dụng kiến trúc MVC nguyên bản vào hệ sinh thái PHP nhằm xây dựng một ứng dụng quản lý chuẩn mực với hệ thống phân quyền phức tạp. Phù hợp làm đồ án môn học nâng cao hoặc tài liệu tham khảo dự án thực tế trong Portfolio cá nhân.*
